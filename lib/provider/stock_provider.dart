@@ -3,10 +3,13 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class StockProvider with ChangeNotifier {
   final TextEditingController cCode = TextEditingController();
   final TextEditingController cQty = TextEditingController();
+  final TextEditingController cOperator = TextEditingController();
+  final TextEditingController cLocation = TextEditingController();
   FocusNode myFocusNode = FocusNode();
 
   List masterData = [];
@@ -73,5 +76,17 @@ class StockProvider with ChangeNotifier {
       }
     }
     return false;
+  }
+
+  Future<void> scanBarcodeCam() async {
+    try {
+      String barScan = await FlutterBarcodeScanner.scanBarcode(
+          '#ff1a1a', 'Cancel', false, ScanMode.BARCODE);
+      if (barScan != '-1') {
+        cCode.text = barScan;
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
