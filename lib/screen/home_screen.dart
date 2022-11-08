@@ -20,7 +20,15 @@ class HomeScreen extends StatelessWidget {
             child: Column(children: [
               TextField(
                 controller: stockProvider.cCode,
-                decoration: const InputDecoration(labelText: 'Code'),
+                decoration: InputDecoration(
+                    labelText: 'Code',
+                    hintText: 'type code here or use scan cam',
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        stockProvider.scanBarcodeCam();
+                      },
+                      icon: const Icon(Icons.qr_code_scanner),
+                    )),
                 textInputAction: TextInputAction.next,
                 focusNode: stockProvider.myFocusNode,
               ),
@@ -40,18 +48,28 @@ class HomeScreen extends StatelessWidget {
                   }
                 },
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    if (stockProvider.cCode.text.isNotEmpty &&
-                        stockProvider.cQty.text.isNotEmpty) {
-                      stockProvider.addData();
-                      stockProvider.clsText();
-                      stockProvider.myFocusNode.requestFocus();
-                    } else {
-                      debugPrint('tidak boleh kosong');
-                    }
-                  },
-                  child: Text('Simpan Data')),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        stockProvider.clsText();
+                      },
+                      child: Text('Clear')),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (stockProvider.cCode.text.isNotEmpty &&
+                            stockProvider.cQty.text.isNotEmpty) {
+                          stockProvider.addData();
+                          stockProvider.clsText();
+                          stockProvider.myFocusNode.requestFocus();
+                        } else {
+                          debugPrint('tidak boleh kosong');
+                        }
+                      },
+                      child: Text('Simpan Data')),
+                ],
+              ),
             ]),
           ),
           Expanded(
