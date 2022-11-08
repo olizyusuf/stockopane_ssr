@@ -10,25 +10,26 @@ class HomeScreen extends StatelessWidget {
     StockProvider stockProvider = Provider.of<StockProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Stock Opname')),
+      appBar: AppBar(title: const Text('Stock Opname'), actions: [
+        IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/setting');
+            },
+            icon: const Icon(Icons.settings))
+      ]),
       body: Container(
         padding: const EdgeInsets.only(right: 10, left: 10),
         child: Column(children: [
           Container(
-            height: 200,
-            padding: const EdgeInsets.all(10),
+            height: 190,
+            padding: const EdgeInsets.only(left: 5, right: 5),
             child: Column(children: [
               TextField(
                 controller: stockProvider.cCode,
-                decoration: InputDecoration(
-                    labelText: 'Code',
-                    hintText: 'type code here or use scan cam',
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        stockProvider.scanBarcodeCam();
-                      },
-                      icon: const Icon(Icons.qr_code_scanner),
-                    )),
+                decoration: const InputDecoration(
+                  labelText: 'Code',
+                  hintText: 'type code here or use scan cam',
+                ),
                 textInputAction: TextInputAction.next,
                 focusNode: stockProvider.myFocusNode,
               ),
@@ -44,9 +45,12 @@ class HomeScreen extends StatelessWidget {
                     stockProvider.clsText();
                     stockProvider.myFocusNode.requestFocus();
                   } else {
-                    debugPrint('tidak boleh kosong');
+                    sDialog(context);
                   }
                 },
+              ),
+              const SizedBox(
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +59,12 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () {
                         stockProvider.clsText();
                       },
-                      child: Text('Clear')),
+                      child: const Text('Clear')),
+                  IconButton(
+                      onPressed: () {
+                        stockProvider.scanBarcodeCam();
+                      },
+                      icon: const Icon(Icons.qr_code_scanner)),
                   ElevatedButton(
                       onPressed: () {
                         if (stockProvider.cCode.text.isNotEmpty &&
@@ -64,13 +73,29 @@ class HomeScreen extends StatelessWidget {
                           stockProvider.clsText();
                           stockProvider.myFocusNode.requestFocus();
                         } else {
-                          debugPrint('tidak boleh kosong');
+                          sDialog(context);
                         }
                       },
-                      child: Text('Simpan Data')),
+                      child: const Text('Save Data')),
                 ],
               ),
             ]),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                'Barcode',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              Text(
+                'Qty',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ],
+          ),
+          const Divider(
+            thickness: 5,
           ),
           Expanded(
             child: ListView.builder(
@@ -83,7 +108,7 @@ class HomeScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(data['code']),
-                        Text('Qty:     ${data['qty']}'),
+                        Text(data['qty']),
                       ]),
                 );
               },
@@ -91,6 +116,19 @@ class HomeScreen extends StatelessWidget {
           ),
         ]),
       ),
+    );
+  }
+
+  Future<dynamic> sDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return const SimpleDialog(
+          contentPadding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          children: [Text('Code atau Qty masih kosong!')],
+        );
+      },
     );
   }
 }

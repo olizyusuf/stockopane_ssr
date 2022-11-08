@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -29,7 +31,8 @@ class StockProvider with ChangeNotifier {
 
   void saveFile() async {
     File file = File(await getFilePath()); // 1
-    file.writeAsString('test to append'); // 2
+    for (var i = 0; i < masterData.length; i++) {}
+    file.writeAsString('test to append\n', mode: FileMode.writeOnlyAppend); // 2
   }
 
   void readFile() async {
@@ -57,7 +60,11 @@ class StockProvider with ChangeNotifier {
         String dirPath = directory!.path;
         String filePath = '$dirPath/abcd.txt';
         File file = File(filePath);
-        await file.writeAsString('12345678,1');
+        for (var i = 0; i < masterData.length; i++) {
+          await file.writeAsString(
+              '${masterData[i]['code']},${masterData[i]['qty']}\n',
+              mode: FileMode.writeOnlyAppend);
+        }
         debugPrint(file.readAsStringSync());
       }
     } catch (e) {
