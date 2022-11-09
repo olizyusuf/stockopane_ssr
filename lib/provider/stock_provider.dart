@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
@@ -12,6 +11,11 @@ class StockProvider with ChangeNotifier {
   final TextEditingController cQty = TextEditingController();
   final TextEditingController cOperator = TextEditingController();
   final TextEditingController cLocation = TextEditingController();
+
+  late String operatorName;
+  late String locationName;
+  String dateNow = ' ';
+
   FocusNode myFocusNode = FocusNode();
 
   List masterData = [];
@@ -19,6 +23,13 @@ class StockProvider with ChangeNotifier {
   void clsText() {
     cCode.clear();
     cQty.clear();
+  }
+
+  void clsData() {
+    masterData.clear();
+    cOperator.clear();
+    cLocation.clear();
+    notifyListeners();
   }
 
   Future<String> getFilePath() async {
@@ -52,13 +63,18 @@ class StockProvider with ChangeNotifier {
     return false;
   }
 
-  Future<bool> exportData() async {
+  Future<bool> exportData(String operatorName, String location) async {
     Directory? directory;
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('ddMMyyyy-HH:mm').format(now);
+    String lastExport = DateFormat('dd/MM/yyy HH:mm').format(now);
+    dateNow = lastExport;
     try {
       if (await _reqPermission(Permission.storage)) {
         directory = await getExternalStorageDirectory();
         String dirPath = directory!.path;
-        String filePath = '$dirPath/abcd.txt';
+        String filePath =
+            '$dirPath/${operatorName}_${location}_$formattedDate.txt';
         File file = File(filePath);
         for (var i = 0; i < masterData.length; i++) {
           await file.writeAsString(
@@ -70,6 +86,7 @@ class StockProvider with ChangeNotifier {
     } catch (e) {
       debugPrint(e.toString());
     }
+    notifyListeners();
     return false;
   }
 
@@ -88,7 +105,7 @@ class StockProvider with ChangeNotifier {
   Future<void> scanBarcodeCam() async {
     try {
       String barScan = await FlutterBarcodeScanner.scanBarcode(
-          '#ff1a1a', 'Cancel', false, ScanMode.BARCODE);
+          '#ff1a1a', 'Cancel', true, ScanMode.BARCODE);
       if (barScan != '-1') {
         cCode.text = barScan;
       }
