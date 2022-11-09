@@ -16,13 +16,15 @@ class StockProvider with ChangeNotifier {
   late String locationName;
   String dateNow = ' ';
 
-  FocusNode myFocusNode = FocusNode();
+  FocusNode focusCode = FocusNode();
+  FocusNode focusQty = FocusNode();
 
   List masterData = [];
 
   void clsText() {
     cCode.clear();
     cQty.clear();
+    focusCode.requestFocus();
   }
 
   void clsData() {
@@ -46,12 +48,12 @@ class StockProvider with ChangeNotifier {
     file.writeAsString('test to append\n', mode: FileMode.writeOnlyAppend); // 2
   }
 
-  void readFile() async {
-    File file = File(await getFilePath()); // 1
-    String fileContent = await file.readAsString(); // 2
+  // void readFile() async {
+  //   File file = File(await getFilePath()); // 1
+  //   String fileContent = await file.readAsString(); // 2
 
-    print('File Content: $fileContent');
-  }
+  //   print('File Content: $fileContent');
+  // }
 
   Future<bool> addData() async {
     masterData.add({
@@ -108,6 +110,7 @@ class StockProvider with ChangeNotifier {
           '#ff1a1a', 'Cancel', true, ScanMode.BARCODE);
       if (barScan != '-1') {
         cCode.text = barScan;
+        focusQty.requestFocus();
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
