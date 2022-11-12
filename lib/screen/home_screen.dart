@@ -68,19 +68,22 @@ class HomeScreen extends StatelessWidget {
                     hintText: 'type code here or use scan cam',
                   ),
                   textInputAction: TextInputAction.next,
-                  focusNode: stockProvider.myFocusNode,
+                  focusNode: stockProvider.focusCode,
+                  autofocus: true,
                 ),
                 TextField(
                   controller: stockProvider.cQty,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(labelText: 'Qty'),
                   textInputAction: TextInputAction.go,
+                  focusNode: stockProvider.focusQty,
+                  autofocus: true,
                   onSubmitted: (value) {
                     if (stockProvider.cCode.text.isNotEmpty &&
                         stockProvider.cQty.text.isNotEmpty) {
                       stockProvider.addData();
                       stockProvider.clsText();
-                      stockProvider.myFocusNode.requestFocus();
+                      stockProvider.focusCode.requestFocus();
                     } else {
                       sDialog(context);
                     }
@@ -108,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                               stockProvider.cQty.text.isNotEmpty) {
                             stockProvider.addData();
                             stockProvider.clsText();
-                            stockProvider.myFocusNode.requestFocus();
+                            stockProvider.focusCode.requestFocus();
                           } else {
                             sDialog(context);
                           }

@@ -144,6 +144,16 @@ class SettingScreen extends StatelessWidget {
               height: 5,
             ),
             Text('Last Export data at ${stockProvider.dateNow}'),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.only(top: 50),
+                alignment: Alignment.center,
+                child: const Text(
+                  'Developed by SabiruSky | github.com/olizyusuf',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            )
           ],
         ),
       ),
