@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   );
                 },
-              ).then((value) => print(value));
+              ).then((value) => value);
               return false;
             },
             child: Container(

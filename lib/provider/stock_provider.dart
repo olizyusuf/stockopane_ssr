@@ -14,6 +14,7 @@ class StockProvider with ChangeNotifier {
 
   late String operatorName;
   late String locationName;
+  bool validateFill = false;
   String dateNow = ' ';
 
   FocusNode focusCode = FocusNode();
@@ -31,6 +32,11 @@ class StockProvider with ChangeNotifier {
     masterData.clear();
     cOperator.clear();
     cLocation.clear();
+    notifyListeners();
+  }
+
+  void validate(bool validateText) {
+    validateFill = validateText;
     notifyListeners();
   }
 
@@ -69,8 +75,7 @@ class StockProvider with ChangeNotifier {
     Directory? directory;
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('ddMMyyyy-HH:mm').format(now);
-    String lastExport = DateFormat('dd/MM/yyy HH:mm').format(now);
-    dateNow = lastExport;
+
     try {
       if (await _reqPermission(Permission.storage)) {
         directory = await getExternalStorageDirectory();
@@ -83,7 +88,7 @@ class StockProvider with ChangeNotifier {
               '${masterData[i]['code']},${masterData[i]['qty']}\n',
               mode: FileMode.writeOnlyAppend);
         }
-        debugPrint(file.readAsStringSync());
+        dateNow = '${operatorName}_${location}_$formattedDate.txt';
       }
     } catch (e) {
       debugPrint(e.toString());
