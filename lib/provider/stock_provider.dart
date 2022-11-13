@@ -14,6 +14,7 @@ class StockProvider with ChangeNotifier {
 
   late String operatorName;
   late String locationName;
+  bool isLoading = false;
   bool validateFill = false;
   String dateNow = ' ';
 
@@ -66,7 +67,6 @@ class StockProvider with ChangeNotifier {
       'code': cCode.value.text,
       'qty': cQty.value.text,
     });
-    debugPrint(masterData.length.toString());
     notifyListeners();
     return false;
   }

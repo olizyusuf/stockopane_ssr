@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
 
@@ -34,12 +35,6 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
-                        child: const Text('Export'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
                         child: const Text('Yes'),
                       ),
                       TextButton(
@@ -54,7 +49,18 @@ class HomeScreen extends StatelessWidget {
                     ],
                   );
                 },
-              ).then((value) => value);
+              ).then(
+                (value) {
+                  if (value) {
+                    Future.delayed(
+                      const Duration(seconds: 1),
+                      () {
+                        SystemNavigator.pop();
+                      },
+                    );
+                  }
+                },
+              );
               return false;
             },
             child: Container(
