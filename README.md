@@ -1,16 +1,16 @@
 # stockopname
 
-A new Flutter project.
+This project for replae old software stockopaname on windows ce,
+
+Feature:
+- easy to use.
+- scan barcode with camera and support hardware barcode scanner.
+- scan barcode and fill qty.
+- filename with operator name, location, and timestamp.
+- export file extension .txt and format (kode,qty).
+
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you need request you can email.
+thank you.
