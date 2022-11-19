@@ -10,6 +10,12 @@ Feature:
 - export file extension .txt and format (kode,qty).
 
 
+Next coming:
+- import file for master data inventory.
+- search code, if code found will fill code.
+- support google sheet api.
+
+
 ## Getting Started
 
 If you need request you can email.
