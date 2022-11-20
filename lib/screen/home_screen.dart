@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                 (value) {
                   if (value) {
                     Future.delayed(
-                      const Duration(seconds: 1),
+                      const Duration(milliseconds: 500),
                       () {
                         SystemNavigator.pop();
                       },
