@@ -11,9 +11,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final String _version = 'v.0.0.1';
+  final String _version = 'v.0.1.0 stable';
   final String _appName = 'github.com/olizyusuf';
-  final int _splashDelay = 5;
+  final int _splashDelay = 6;
 
   @override
   void initState() {
@@ -59,6 +59,14 @@ class _SplashScreenState extends State<SplashScreen> {
                             'Stock Opname App',
                             style: TextStyle(
                                 fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Image.asset(''),
                           )
                         ],
                       )),
@@ -69,6 +77,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       const CircularProgressIndicator(
                         color: Colors.blue,
                       ),
+                      const Text('Loading data please wait....'),
                       Container(
                         height: 10,
                       ),

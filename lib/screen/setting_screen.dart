@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
+
+import '../model/stock.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -47,11 +50,9 @@ class SettingScreen extends StatelessWidget {
               ),
               TextField(
                 controller: stockProvider.cLocation,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                   hintText: 'Enter you location',
-                  errorText:
-                      stockProvider.validateFill ? 'value cant be empty' : null,
                 ),
               ),
               const SizedBox(
@@ -99,20 +100,6 @@ class SettingScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.red),
                       )),
                   ElevatedButton(
-                      onPressed: () {
-                        if (stockProvider.cOperator.text.isNotEmpty &&
-                            stockProvider.cLocation.text.isNotEmpty) {
-                          stockProvider.operatorName =
-                              stockProvider.cOperator.text;
-                          stockProvider.locationName =
-                              stockProvider.cLocation.text;
-                          stockProvider.validate(false);
-                        } else {
-                          stockProvider.validate(true);
-                        }
-                      },
-                      child: const Text('Save')),
-                  ElevatedButton(
                     onPressed: () {
                       showDialog(
                         context: context,
@@ -140,18 +127,34 @@ class SettingScreen extends StatelessWidget {
                           );
                         },
                       ).then((value) async {
+                        stockProvider.dataBox = await Hive.openBox<Stock>(
+                            stockProvider.dataBoxName);
                         if (value) {
                           if (stockProvider.cOperator.text.isNotEmpty &&
-                              stockProvider.cLocation.text.isNotEmpty) {
+                              stockProvider.cLocation.text.isNotEmpty &&
+                              stockProvider.dataBox.length != 0) {
+                            stockProvider.operatorName =
+                                stockProvider.cOperator.text;
+                            stockProvider.locationName =
+                                stockProvider.cLocation.text;
                             await stockProvider.exportData(
                                 stockProvider.operatorName,
                                 stockProvider.locationName);
-                            stockProvider.validate(false);
                           } else {
-                            stockProvider.validate(true);
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const SimpleDialog(
+                                  contentPadding: EdgeInsets.all(10),
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Text(
+                                        'Operator name and location is empty! or data is empty please fill it')
+                                  ],
+                                );
+                              },
+                            );
                           }
-                        } else {
-                          stockProvider.validate(false);
                         }
                       });
                     },

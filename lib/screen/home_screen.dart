@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
+
+import '../model/stock.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -28,8 +31,7 @@ class HomeScreen extends StatelessWidget {
                 builder: (context) {
                   return AlertDialog(
                     title: const Text('Are you sure you want to quit!?'),
-                    content: const Text(
-                        'This proses will delete all data, you can export data first.'),
+                    content: const Text('please export or reset if finish'),
                     actions: [
                       ElevatedButton(
                         onPressed: () {
@@ -84,10 +86,10 @@ class HomeScreen extends StatelessWidget {
                   textInputAction: TextInputAction.go,
                   focusNode: stockProvider.focusQty,
                   autofocus: true,
-                  onSubmitted: (value) {
+                  onSubmitted: (value) async {
                     if (stockProvider.cCode.text.isNotEmpty &&
                         stockProvider.cQty.text.isNotEmpty) {
-                      stockProvider.addData();
+                      await stockProvider.addData();
                       stockProvider.clsText();
                       stockProvider.focusCode.requestFocus();
                     } else {
@@ -112,10 +114,10 @@ class HomeScreen extends StatelessWidget {
                         },
                         icon: const Icon(Icons.qr_code_scanner)),
                     ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (stockProvider.cCode.text.isNotEmpty &&
                               stockProvider.cQty.text.isNotEmpty) {
-                            stockProvider.addData();
+                            await stockProvider.addData();
                             stockProvider.clsText();
                             stockProvider.focusCode.requestFocus();
                           } else {
@@ -145,22 +147,51 @@ class HomeScreen extends StatelessWidget {
             thickness: 5,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: stockProvider.masterData.length,
-              itemBuilder: (context, index) {
-                var data = stockProvider.masterData[index];
-                return SizedBox(
-                  height: 25,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(data['code']),
-                        Text(data['qty']),
-                      ]),
+              child: FutureBuilder(
+            future: Hive.openBox<Stock>(stockProvider.dataBoxName),
+            builder: (context, AsyncSnapshot snapshot) {
+              final getData = snapshot.data;
+              if (snapshot.connectionState == ConnectionState.done &&
+                  getData.length != 0) {
+                return ListView.builder(
+                  itemCount: getData.length,
+                  itemBuilder: (context, index) {
+                    var data = getData.getAt(index);
+                    return SizedBox(
+                      height: 25,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(data.code),
+                            Text(data.qty.toString()),
+                          ]),
+                    );
+                  },
                 );
-              },
-            ),
-          ),
+              } else {
+                return const Center(
+                  child: Text('data is empty'),
+                );
+              }
+            },
+          )),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: stockProvider.masterData.length,
+          //     itemBuilder: (context, index) {
+          //       var data = stockProvider.masterData[index];
+          //       return SizedBox(
+          //         height: 25,
+          //         child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //             children: [
+          //               Text(data['code']),
+          //               Text(data['qty']),
+          //             ]),
+          //       );
+          //     },
+          //   ),
+          // ),
         ]),
       ),
     );

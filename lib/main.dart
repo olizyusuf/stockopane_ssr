@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
 import 'package:stockopname/screen/home_screen.dart';
 import 'package:stockopname/screen/setting_screen.dart';
 import 'package:stockopname/screen/splash_screen.dart';
 
-void main() {
+import 'model/stock.dart';
+
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(StockAdapter());
   runApp(const MyApp());
 }
 

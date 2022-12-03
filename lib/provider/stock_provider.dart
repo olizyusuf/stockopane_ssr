@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
+import '../model/stock.dart';
 
 class StockProvider with ChangeNotifier {
   final TextEditingController cCode = TextEditingController();
@@ -21,6 +26,9 @@ class StockProvider with ChangeNotifier {
   FocusNode focusCode = FocusNode();
   FocusNode focusQty = FocusNode();
 
+  final String dataBoxName = "stockDb";
+  late Box<Stock> dataBox;
+
   List masterData = [];
 
   // CLEAR TEXT
@@ -32,7 +40,7 @@ class StockProvider with ChangeNotifier {
 
   // CLEAR DATA
   void clsData() {
-    masterData.clear();
+    dataBox.clear();
     cOperator.clear();
     cLocation.clear();
     notifyListeners();
@@ -65,21 +73,30 @@ class StockProvider with ChangeNotifier {
   //   print('File Content: $fileContent');
   // }
 
-  // ADD DATA TO TEMP VARIABLE
+  // ADD DATA TO DATABASE HIVE
   Future<bool> addData() async {
-    masterData.add({
-      'code': cCode.value.text,
-      'qty': cQty.value.text,
-    });
+    dataBox = await Hive.openBox<Stock>(dataBoxName);
+    dataBox.add(Stock(cCode.value.text, int.parse(cQty.value.text)));
     notifyListeners();
     return false;
   }
+
+  // ADD DATA TO TEMP VARIABLE
+  // Future<bool> addData() async {
+  //   masterData.add({
+  //     'code': cCode.value.text,
+  //     'qty': cQty.value.text,
+  //   });
+  //   notifyListeners();
+  //   return false;
+  // }
 
   // EXPORT FILE TO TXT LOCATION FOLDER AT INTERNAL ANDROID DATA COM.STOCKOPNAME.OLIZ.STOCKOPNAME
   Future<bool> exportData(String operatorName, String location) async {
     Directory? directory;
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('ddMMyyyy-HH:mm').format(now);
+    dataBox = await Hive.openBox<Stock>(dataBoxName);
 
     try {
       if (await _reqPermission(Permission.storage)) {
@@ -88,9 +105,9 @@ class StockProvider with ChangeNotifier {
         String filePath =
             '$dirPath/${operatorName}_${location}_$formattedDate.txt';
         File file = File(filePath);
-        for (var i = 0; i < masterData.length; i++) {
+        for (var i = 0; i < dataBox.length; i++) {
           await file.writeAsString(
-              '${masterData[i]['code']},${masterData[i]['qty']}\n',
+              '${dataBox.getAt(i)?.code},${dataBox.getAt(i)?.qty.toString()}\n',
               mode: FileMode.writeOnlyAppend);
         }
         dateNow = '${operatorName}_${location}_$formattedDate.txt';
