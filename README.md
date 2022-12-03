@@ -16,7 +16,7 @@ Next coming:
 - support google sheet api.
 
 
-## Getting Started
+## Screenshoot
 
 If you need request you can email.
 thank you.
