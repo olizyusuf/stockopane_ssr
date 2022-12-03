@@ -23,12 +23,14 @@ class StockProvider with ChangeNotifier {
 
   List masterData = [];
 
+  // CLEAR TEXT
   void clsText() {
     cCode.clear();
     cQty.clear();
     focusCode.requestFocus();
   }
 
+  // CLEAR DATA
   void clsData() {
     masterData.clear();
     cOperator.clear();
@@ -36,6 +38,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  // VALIDATE TEXTFIELD SETTING SCREEN
   void validate(bool validateText) {
     validateFill = validateText;
     notifyListeners();
@@ -62,6 +65,7 @@ class StockProvider with ChangeNotifier {
   //   print('File Content: $fileContent');
   // }
 
+  // ADD DATA TO TEMP VARIABLE
   Future<bool> addData() async {
     masterData.add({
       'code': cCode.value.text,
@@ -71,6 +75,7 @@ class StockProvider with ChangeNotifier {
     return false;
   }
 
+  // EXPORT FILE TO TXT LOCATION FOLDER AT INTERNAL ANDROID DATA COM.STOCKOPNAME.OLIZ.STOCKOPNAME
   Future<bool> exportData(String operatorName, String location) async {
     Directory? directory;
     DateTime now = DateTime.now();
@@ -97,6 +102,7 @@ class StockProvider with ChangeNotifier {
     return false;
   }
 
+  // PERMISSION ACCESS ANDROID DEVICES
   Future<bool> _reqPermission(Permission permission) async {
     if (await permission.isGranted) {
       return true;
@@ -109,6 +115,7 @@ class StockProvider with ChangeNotifier {
     return false;
   }
 
+  // SCAN BARCODE FROM CAMERA
   Future<void> scanBarcodeCam() async {
     try {
       String barScan = await FlutterBarcodeScanner.scanBarcode(
