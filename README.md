@@ -17,16 +17,13 @@ Next coming:
 
 
 ## Screenshoot
-<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/01.png" width="300" />
-
-
-![01](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/01.png)
-![02](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/02.png)
-![03](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/03.png)
-![04](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/04.png)
-![05](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/05.png)
-![06](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/06.png)
-![07](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/07.png)
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/01.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/02.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/03.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/04.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/05.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/06.png" width="250" />
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/07.png" width="250" />
 
 If you need request you can email.
 thank you.
