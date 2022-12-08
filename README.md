@@ -17,6 +17,8 @@ Next coming:
 
 
 ## Screenshoot
+<img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/01.png" width="300" />
+
 
 ![01](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/01.png)
 ![02](https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/02.png)
