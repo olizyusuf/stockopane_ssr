@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# License Key
+/home/sabiru/dev/flutter_project/stockopname/lib/provider/license_provider.dart
