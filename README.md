@@ -22,6 +22,9 @@ Next coming:
 <img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/05.png" width="250" /><img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/06.png" width="250" />
 <img src="https://github.com/olizyusuf/stockopname_app/raw/master/assets/screenshoot/07.png" width="250" />
 
-If you need request you can email.
+need license key for export data.
+If you need request you can email @ olizyusuf22@gmail.com
 thank you.
+
+
 
