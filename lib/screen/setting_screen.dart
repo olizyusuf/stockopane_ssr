@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:stockopname/provider/license_provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
 
 import '../model/stock.dart';
@@ -11,6 +12,8 @@ class SettingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StockProvider stockProvider = Provider.of<StockProvider>(context);
+    LicenseProvider licenseProvider =
+        Provider.of<LicenseProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -101,62 +104,67 @@ class SettingScreen extends StatelessWidget {
                       )),
                   ElevatedButton(
                     onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Export Data'),
-                            content: const Text('are you sure export data?'),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
-                                child: const Text('Export'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context, false);
-                                },
-                                child: const Text(
-                                  'No',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      ).then((value) async {
-                        stockProvider.dataBox = await Hive.openBox<Stock>(
-                            stockProvider.dataBoxName);
-                        if (value) {
-                          if (stockProvider.cOperator.text.isNotEmpty &&
-                              stockProvider.cLocation.text.isNotEmpty &&
-                              stockProvider.dataBox.length != 0) {
-                            stockProvider.operatorName =
-                                stockProvider.cOperator.text;
-                            stockProvider.locationName =
-                                stockProvider.cLocation.text;
-                            await stockProvider.exportData(
-                                stockProvider.operatorName,
-                                stockProvider.locationName);
-                          } else {
-                            showDialog(
+                      licenseProvider.isValidSn
+                          ? showDialog(
                               context: context,
                               builder: (context) {
-                                return const SimpleDialog(
-                                  contentPadding: EdgeInsets.all(10),
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Text(
-                                        'Operator name and location is empty! or data is empty please fill it')
+                                return AlertDialog(
+                                  title: const Text('Export Data'),
+                                  content:
+                                      const Text('are you sure export data?'),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, true);
+                                      },
+                                      child: const Text('Export'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context, false);
+                                      },
+                                      child: const Text(
+                                        'No',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    )
                                   ],
                                 );
                               },
-                            );
-                          }
-                        }
-                      });
+                            ).then((value) async {
+                              stockProvider.dataBox = await Hive.openBox<Stock>(
+                                  stockProvider.dataBoxName);
+                              if (value) {
+                                if (stockProvider.cOperator.text.isNotEmpty &&
+                                    stockProvider.cLocation.text.isNotEmpty &&
+                                    stockProvider.dataBox.length != 0) {
+                                  stockProvider.operatorName =
+                                      stockProvider.cOperator.text;
+                                  stockProvider.locationName =
+                                      stockProvider.cLocation.text;
+                                  await stockProvider.exportData(
+                                      stockProvider.operatorName,
+                                      stockProvider.locationName);
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const SimpleDialog(
+                                        contentPadding: EdgeInsets.all(10),
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                              'Operator name and location is empty! or data is empty please fill it')
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              }
+                            })
+                          : ElevatedButton(
+                              onPressed: () {},
+                              child: const Text('Export Data'));
                     },
                     child: const Text('Export Data'),
                   ),
@@ -165,7 +173,9 @@ class SettingScreen extends StatelessWidget {
               const SizedBox(
                 height: 5,
               ),
-              Text('Last Export data is ${stockProvider.dateNow}'),
+              licenseProvider.isValidSn
+                  ? Text('Last Export data is ${stockProvider.dateNow}')
+                  : const Text('Please Buy License for Can Export Data'),
               Container(
                 margin: const EdgeInsets.only(top: 50),
                 alignment: Alignment.center,
@@ -174,6 +184,12 @@ class SettingScreen extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
+              Center(
+                  child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/license');
+                      },
+                      child: const Text('License'))),
             ],
           ),
         ),

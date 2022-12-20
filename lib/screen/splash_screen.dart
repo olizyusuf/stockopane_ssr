@@ -11,7 +11,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final String _version = 'v.0.1.0 stable';
+  final String _version = 'v 1.0.2 stable';
   final String _appName = 'github.com/olizyusuf';
   final int _splashDelay = 6;
 
@@ -63,10 +63,10 @@ class _SplashScreenState extends State<SplashScreen> {
                           const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 50,
                             height: 50,
-                            child: Image.asset(''),
+                            child: Icon(Icons.logo_dev),
                           )
                         ],
                       )),

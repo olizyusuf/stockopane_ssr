@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
 
 import '../model/stock.dart';
+import '../provider/license_provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,6 +13,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StockProvider stockProvider = Provider.of<StockProvider>(context);
+    LicenseProvider licenseProvider =
+        Provider.of<LicenseProvider>(context, listen: false);
+    licenseProvider.initPlatformState();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Stock Opname'), actions: [

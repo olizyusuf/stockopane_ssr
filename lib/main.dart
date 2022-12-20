@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:stockopname/model/license.dart';
+import 'package:stockopname/provider/license_provider.dart';
 import 'package:stockopname/provider/stock_provider.dart';
 import 'package:stockopname/screen/home_screen.dart';
+import 'package:stockopname/screen/license_screen.dart';
 import 'package:stockopname/screen/setting_screen.dart';
 import 'package:stockopname/screen/splash_screen.dart';
 
 import 'model/stock.dart';
 
 void main() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(StockAdapter());
+  Hive
+    ..initFlutter()
+    ..registerAdapter(StockAdapter())
+    ..registerAdapter(LicenseAdapter());
+
   runApp(const MyApp());
 }
 
@@ -23,6 +29,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => StockProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LicenseProvider(),
         )
       ],
       child: MaterialApp(
@@ -32,6 +41,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/home': (context) => const HomeScreen(),
           '/setting': (context) => const SettingScreen(),
+          '/license': (context) => const LicenseScreen(),
         },
       ),
     );
