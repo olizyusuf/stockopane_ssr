@@ -36,7 +36,7 @@ class LicenseProvider with ChangeNotifier {
     // convert uuid
     _platformVersion = uuid.substring(0, 25);
 
-    // check box
+    // check box data
     if (dataBox.isEmpty) {
       addUuidToDb(_platformVersion, '');
     }
