@@ -31,6 +31,14 @@ class StockProvider with ChangeNotifier {
 
   List masterData = [];
 
+  // singleton
+  StockProvider._privateConst();
+  static final StockProvider instance = StockProvider._privateConst();
+
+  factory StockProvider() {
+    return instance;
+  }
+
   // CLEAR TEXT
   void clsText() {
     cCode.clear();
@@ -91,30 +99,33 @@ class StockProvider with ChangeNotifier {
   //   return false;
   // }
 
-  // EXPORT FILE TO TXT LOCATION FOLDER AT INTERNAL ANDROID DATA COM.STOCKOPNAME.OLIZ.STOCKOPNAME
+  // EXPORT FILE TO TXT LOCATION FOLDER AT INTERNAL ANDROID
   Future<bool> exportData(String operatorName, String location) async {
-    Directory? directory;
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('ddMMyyyy-HH:mm').format(now);
     dataBox = await Hive.openBox<Stock>(dataBoxName);
 
     try {
       if (await _reqPermission(Permission.storage)) {
-        directory = await getExternalStorageDirectory();
-        String dirPath = directory!.path;
-        String filePath =
-            '$dirPath/${operatorName}_${location}_$formattedDate.txt';
-        File file = File(filePath);
-        for (var i = 0; i < dataBox.length; i++) {
-          await file.writeAsString(
-              '${dataBox.getAt(i)?.code},${dataBox.getAt(i)?.qty.toString()}\n',
-              mode: FileMode.writeOnlyAppend);
+        // Directory? directory = await getExternalStorageDirectory();
+        Directory? directory = Directory('/storage/emulated/0/Download');
+        if (await directory.exists()) {
+          String dirPath = directory.path;
+          String filePath =
+              '$dirPath/${operatorName}_${location}_$formattedDate.txt';
+          File file = File(filePath);
+          for (var i = 0; i < dataBox.length; i++) {
+            await file.writeAsString(
+                '${dataBox.getAt(i)?.code},${dataBox.getAt(i)?.qty.toString()}\n',
+                mode: FileMode.writeOnlyAppend);
+          }
+          dateNow = '${operatorName}_${location}_$formattedDate.txt';
         }
-        dateNow = '${operatorName}_${location}_$formattedDate.txt';
       }
     } catch (e) {
       debugPrint(e.toString());
     }
+
     notifyListeners();
     return false;
   }
@@ -125,7 +136,7 @@ class StockProvider with ChangeNotifier {
       return true;
     } else {
       var result = await permission.request();
-      if (result == PermissionStatus.granted) {
+      if (result.isGranted) {
         return true;
       }
     }
